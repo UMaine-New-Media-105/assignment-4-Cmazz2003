@@ -1,0 +1,120 @@
+function setup() {
+  createCanvas(960, 540);
+  noLoop();
+
+  tilesPerRow = 5;
+  tilesPerColumn = 3;
+  tileWidth = width / tilesPerRow;
+  tileHeight = height / tilesPerColumn;
+
+  //define a flower
+  flower1 = {
+    startX: 100,
+    startY: 50,
+    scale: 0.3,
+    points: 30,
+    startAngle: 20,
+    fill: "tomato",
+  }
+  flower2 = {
+    startX: 150,
+    startY: 110,
+    scale: 0.2,
+    points: 10,
+    startAngle: 40,
+    fill: "magenta",
+  }
+  flower3 = {
+    startX: 50,
+    startY: 140,
+    scale: 0.25,
+    points: 20,
+    startAngle: 60,
+    fill: "seagreen",
+  }
+  //Bugs
+  bugFills = ["olivedrab", "goldenrod", "indigo"];
+  bugFill = random(bugFills);
+  bugsPerTile = 5;
+
+//bug movement
+lineStroke = "white";
+linesPerTile = 3;
+endPointsX = [0, tileWidth / 3, tileWidth * (2 / 3), tileWidth];
+endPointsY = [0, tileHeight / 3, tileHeight * (2 / 3), tileHeight];
+}
+function draw() {
+  background("palegreen");
+  // draws a row of flowers
+  let columnsDrawn;
+  for (let columnsDrawn = 0; columnsDrawn < tilesPerRow; columnsDrawn++) {
+    let offsetRight = columnsDrawn * tileWidth;
+
+    // draws all rows of flowers
+    let rowsdrawn;
+    for (let rowsDrawn = 0; rowsDrawn < tilesPerColumn; rowsDrawn++) {
+      let offsetDown = rowsDrawn * tileHeight;
+
+      //add bug movement
+      for (let linesDrawn = 0; linesDrawn < linesPerTile; linesDrawn++) {
+        let x1 = offsetRight + random(endPointsX);
+        let y1 = offsetDown + random(endPointsY);
+        let x2 = offsetRight + random(endPointsX);
+        let y2 = offsetDown + random(endPointsY);
+        addMovement(x1, y1, x2, y2);
+        
+        //add the bugs
+        for (let bugsDrawn = 0; bugsDrawn < bugsPerTile; bugsDrawn++) {
+          bugFill = random(bugFills);
+          let bugX = offsetRight + random(tileWidth);
+          let bugY = offsetDown + random(tileHeight);
+          addBugs(bugX, bugY, bugFill);
+        }
+      }
+      //flower distribution across the canvas
+      flower1.x = flower1.startX + offsetRight;
+      flower2.x = flower2.startX + offsetRight;
+      flower3.x = flower3.startX + offsetRight;
+      flower1.y = flower1.startY + offsetDown;
+      flower2.y = flower2.startY + offsetDown;
+      flower3.y = flower3.startY + offsetDown;
+      //randomly changes the number of points in a flower per tile
+      flower1.points = random(30);
+      flower2.points = random(30);
+      flower3.points = random(30);
+      addFlower(flower1);
+      addFlower(flower2);
+      addFlower(flower3);
+    }
+  }
+}
+
+function addFlower(flower) {
+  push();
+  translate(flower.x, flower.y);
+  scale(flower.scale);
+  rotate(flower.startAngle);
+  fill(flower.fill);
+  strokeWeight(5);
+  let addAngle = 360 / flower.points;
+  for (let pointsDrawn = 0; pointsDrawn < flower.points; pointsDrawn++) {
+    rotate(72);
+    ellipse(0, 50, 220, 20);
+  }
+  pop();
+}
+function addBugs(x, y, bugFill) {
+  push();
+  translate(x, y);
+  fill(bugFill);
+  strokeWeight(1);
+  ellipse(0, 0, 15);
+  pop();
+}
+function addMovement(startX, startY, endX, endY) {
+  push();
+  noFill();
+  stroke(lineStroke);
+  line(startX, startY, endX, endY);
+  pop();
+}
