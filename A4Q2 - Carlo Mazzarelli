@@ -1,0 +1,73 @@
+function setup() {
+  createCanvas(960, 540);
+  noLoop();
+
+  tilesPerRow = 5;
+  tilesPerColumn = 3;
+  tileWidth = width / tilesPerRow;
+  tileHeight = height / tilesPerColumn;
+
+  //define a flower
+  flower1 = {
+    startX: 100,
+    startY: 50,
+    scale: 0.3,
+    points: 30,
+    startAngle: 20,
+    fill: "tomato",
+  };
+  flower2 = {
+    startX: 150,
+    startY: 110,
+    scale: 0.2,
+    points: 10,
+    startAngle: 40,
+    fill: "magenta",
+  };
+  flower3 = {
+    startX: 50,
+    startY: 140,
+    scale: 0.25,
+    points: 20,
+    startAngle: 60,
+    fill: "seagreen",
+  };
+}
+
+function draw() {
+  background("powderblue");
+  // draws a row of flowers
+  let columnsDrawn;
+  for (let columnsDrawn = 0; columnsDrawn < tilesPerRow; columnsDrawn++) {
+    let offsetRight = columnsDrawn * tileWidth;
+    // draws a row of flowers
+    let rowsdrawn;
+    for (let rowsDrawn = 0; rowsDrawn < tilesPerColumn; rowsDrawn++) {
+      let offsetDown = rowsDrawn * tileHeight;
+      flower1.x = flower1.startX + offsetRight;
+      flower2.x = flower2.startX + offsetRight;
+      flower3.x = flower3.startX + offsetRight;
+      flower1.y = flower1.startY + offsetDown;
+      flower2.y = flower2.startY + offsetDown;
+      flower3.y = flower3.startY + offsetDown;
+      addFlower(flower1);
+      addFlower(flower2);
+      addFlower(flower3);
+    }
+  }
+}
+
+function addFlower(flower) {
+  push();
+  translate(flower.x, flower.y);
+  scale(flower.scale);
+  rotate(flower.startAngle);
+  fill(flower.fill);
+  strokeWeight(5);
+  let addAngle = 360 / flower.points;
+  for (let pointsDrawn = 0; pointsDrawn < flower.points; pointsDrawn++) {
+    rotate(72);
+    ellipse(0, 50, 220, 20);
+  }
+  pop();
+}
